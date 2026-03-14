@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
 import { getUsers } from "@/services/users.service"
 
-export const useUsers = () => {
+export const useUsers = (page: number) => {
   return useQuery({
-    queryKey: ["users"],
-    queryFn: getUsers,
+    queryKey: ["users", page],
+    queryFn: () => getUsers(page),
   })
 }

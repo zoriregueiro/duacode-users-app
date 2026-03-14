@@ -8,17 +8,16 @@ interface Props {
 
 export const UserList = ({ users }: Props) => {
 
-  const memoizedUsers = useMemo(() => {
-    return users
+  const sortedUsers = useMemo(() => {
+    return [...users].sort((a, b) =>
+      a.first_name.localeCompare(b.first_name)
+    )
   }, [users])
 
   return (
     <div className="grid grid-cols-3 gap-6">
-      {memoizedUsers.map((user) => (
-        <UserCard
-          key={user.id}
-          user={user}
-        />
+      {sortedUsers.map((user) => (
+        <UserCard key={user.id} user={user} />
       ))}
     </div>
   )
