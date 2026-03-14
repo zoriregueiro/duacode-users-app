@@ -1,6 +1,7 @@
 import { User } from "@/types/user.types"
 import { Avatar } from "../ui/Avatar"
 import { Card } from "../ui/Card"
+import Link from "next/link"
 
 interface Props {
   user: User
@@ -23,6 +24,12 @@ export const UserDetail = ({ user }: Props) => {
         <p className="text-gray-500">
           {user.email}
         </p>
+      <Link
+        href={`/users/edit/${user.id}`}
+        className="bg-blue-600 text-white px-4 py-2 rounded"
+      >
+        Editar usuario
+      </Link>
 
       </div>
     </Card>
