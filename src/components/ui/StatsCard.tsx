@@ -16,15 +16,9 @@ export const StatsCard = ({
       <p className="text-sm text-gray-400">{title}</p>
 
       <div className="flex items-center gap-2 mt-2">
-        <span className={`text-2xl font-bold ${color}`}>
-          {value}
-        </span>
+        <span className={`text-2xl font-bold ${color}`}>{value}</span>
 
-        {subtitle && (
-          <span className="text-sm text-gray-500">
-            {subtitle}
-          </span>
-        )}
+        {subtitle && <span className="text-sm text-gray-500">{subtitle}</span>}
       </div>
     </div>
   )

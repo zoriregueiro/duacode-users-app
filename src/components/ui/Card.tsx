@@ -10,7 +10,7 @@ export const Card = ({ children, className, ...props }: Props) => {
     <div
       className={clsx(
         "bg-[#111827] border border-gray-800 rounded-xl p-5 shadow-sm",
-        className
+        className,
       )}
       {...props}
     >

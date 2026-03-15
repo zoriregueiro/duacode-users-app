@@ -17,62 +17,53 @@ import { CreateUserModal } from "@/components/users/CreateUserModal"
 import { useCreateUser } from "@/hooks/useUsersMutations"
 
 export default function Home() {
-
   const [page, setPage] = useState(1)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [search, setSearch] = useState("")
-const [drawerMode, setDrawerMode] = useState<"view" | "edit">("view")
-const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [drawerMode, setDrawerMode] = useState<"view" | "edit">("view")
+  const [isCreateOpen, setIsCreateOpen] = useState(false)
 
+  const { data, error, isLoading } = useUsers(page)
 
-const { data, error, isLoading } = useUsers(page)
+  const users = data?.data || []
 
+  const debouncedSearch = useDebounce(search, 400)
 
-const users = data?.data || []
+  const filteredUsers = useMemo(() => {
+    if (!debouncedSearch) return users
 
-const debouncedSearch = useDebounce(search, 400)
+    const term = debouncedSearch.toLowerCase()
 
-const filteredUsers = useMemo(() => {
-  
-  if (!debouncedSearch) return users
-  
-  const term = debouncedSearch.toLowerCase()
-  
-  return users.filter((user) =>
-    user.first_name.toLowerCase().includes(term) ||
-  user.last_name.toLowerCase().includes(term) ||
-  user.email.toLowerCase().includes(term)
-)
+    return users.filter(
+      (user) =>
+        user.first_name.toLowerCase().includes(term) ||
+        user.last_name.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term),
+    )
+  }, [users, debouncedSearch])
 
-}, [users, debouncedSearch])
+  const updateMutation = useUpdateUser()
+  const deleteMutation = useDeleteUser()
+  const createMutation = useCreateUser()
 
-
-
-const updateMutation = useUpdateUser()
-const deleteMutation = useDeleteUser()
-const createMutation = useCreateUser()
-
-const isDrawerOpen = !!selectedUser
-
+  const isDrawerOpen = !!selectedUser
 
   useEffect(() => {
-  setPage(1)
-}, [debouncedSearch])
+    setPage(1)
+  }, [debouncedSearch])
 
   return (
     <main className="min-h-screen bg-[#0b0f14] text-gray-200 p-10">
-
       <div
         className={`transition-all max-w-7xl mx-auto ${
           isDrawerOpen ? "blur-sm opacity-60" : ""
         }`}
       >
-
         <Header
-        onCreateUser={() => setIsCreateOpen(true)}
-  search={search}
-  onSearch={setSearch}
-/>
+          onCreateUser={() => setIsCreateOpen(true)}
+          search={search}
+          onSearch={setSearch}
+        />
 
         <StatsGrid />
 
@@ -82,57 +73,54 @@ const isDrawerOpen = !!selectedUser
 
         {isLoading && <SkeletonGrid />}
 
-   {!isLoading && !error && users.length === 0 && (
-  <EmptyState type="users" />
-)}
+        {!isLoading && !error && users.length === 0 && (
+          <EmptyState type="users" />
+        )}
 
-{!isLoading && !error && users.length > 0 && filteredUsers.length === 0 && (
-  <EmptyState type="search" />
-)}
+        {!isLoading &&
+          !error &&
+          users.length > 0 &&
+          filteredUsers.length === 0 && <EmptyState type="search" />}
 
         {!isLoading && !error && users.length > 0 && (
           <UserList
             users={filteredUsers}
-           onSelect={(user) => {
-  setSelectedUser(user)
-  setDrawerMode("view")
-}}
-          
+            onSelect={(user) => {
+              setSelectedUser(user)
+              setDrawerMode("view")
+            }}
           />
         )}
 
-  {filteredUsers.length > 0 && (
-  <Pagination
-    page={page}
-    totalPages={data?.total_pages || 1}
-    onChange={setPage}
-  />
-)}
-
+        {filteredUsers.length > 0 && (
+          <Pagination
+            page={page}
+            totalPages={data?.total_pages || 1}
+            onChange={setPage}
+          />
+        )}
       </div>
 
-<UserDrawer
-  user={selectedUser}
-  mode={drawerMode}
-  onEdit={() => setDrawerMode("edit")}
-  onClose={() => setSelectedUser(null)}
-  onSave={(data) => {
+      <UserDrawer
+        user={selectedUser}
+        mode={drawerMode}
+        onEdit={() => setDrawerMode("edit")}
+        onClose={() => setSelectedUser(null)}
+        onSave={(data) => {
+          if (!selectedUser) return
 
-    if (!selectedUser) return
-
-    updateMutation.mutate(
-      { id: selectedUser.id, data },
-      {
-        onSuccess: () => {
-          setSelectedUser(null)
-          setDrawerMode("view")
-        }
-      }
-    )
-
-  }}
-  onDelete={(id) => deleteMutation.mutate(id)}
-/>
+          updateMutation.mutate(
+            { id: selectedUser.id, data },
+            {
+              onSuccess: () => {
+                setSelectedUser(null)
+                setDrawerMode("view")
+              },
+            },
+          )
+        }}
+        onDelete={(id) => deleteMutation.mutate(id)}
+      />
 
       {isDrawerOpen && (
         <div
@@ -142,20 +130,17 @@ const isDrawerOpen = !!selectedUser
       )}
 
       <CreateUserModal
-  open={isCreateOpen}
-  onClose={() => setIsCreateOpen(false)}
-  onCreate={(data) => {
-
-    createMutation.mutate(data, {
-      onSuccess: () => {
-        setIsCreateOpen(false)
-        setPage(1)
-      }
-    })
-
-  }}
-/>
-
+        open={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+        onCreate={(data) => {
+          createMutation.mutate(data, {
+            onSuccess: () => {
+              setIsCreateOpen(false)
+              setPage(1)
+            },
+          })
+        }}
+      />
     </main>
   )
 }

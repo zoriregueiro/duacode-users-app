@@ -6,7 +6,6 @@ interface Props {
 }
 
 export const Avatar = ({ src, alt }: Props) => {
-
   if (!src) {
     return (
       <div
@@ -24,10 +23,6 @@ export const Avatar = ({ src, alt }: Props) => {
   }
 
   return (
-    <img
-      src={src}
-      alt={alt}
-      className="w-14 h-14 rounded-full object-cover"
-    />
+    <img src={src} alt={alt} className="w-14 h-14 rounded-full object-cover" />
   )
 }

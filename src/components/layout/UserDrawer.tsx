@@ -22,7 +22,6 @@ export const UserDrawer = ({
   onSave,
   onDelete,
 }: Props) => {
-
   useEscapeKey(onClose)
 
   if (!user) return null
@@ -42,22 +41,17 @@ export const UserDrawer = ({
       flex flex-col
       "
     >
-
       <div className="flex justify-between items-center mb-6">
-
         <h2 className="font-semibold text-lg">
           {mode === "view" ? "Detalle del usuario" : "Editar usuario"}
         </h2>
 
         <button onClick={onClose}>✕</button>
-
       </div>
-
 
       {mode === "view" && (
         <>
           <div className="text-center">
-
             <img
               src={user.avatar}
               className="w-24 h-24 rounded-full mx-auto border-4 border-green-500"
@@ -67,14 +61,10 @@ export const UserDrawer = ({
               {user.first_name} {user.last_name}
             </h3>
 
-            <p className="text-green-400 text-sm">
-              Developer
-            </p>
-
+            <p className="text-green-400 text-sm">Developer</p>
           </div>
 
           <div className="mt-8 space-y-4 text-sm">
-
             <div className="bg-gray-800/40 p-3 rounded-lg">
               <p className="text-xs text-gray-500">Email</p>
               <p>{user.email}</p>
@@ -89,11 +79,9 @@ export const UserDrawer = ({
               <p className="text-xs text-gray-500">Rol</p>
               <p>Developer</p>
             </div>
-
           </div>
 
           <div className="mt-auto pt-6 flex gap-3">
-
             <button
               onClick={onEdit}
               className="flex-1 bg-green-500 hover:bg-green-600 text-black font-medium py-1 rounded"
@@ -107,19 +95,13 @@ export const UserDrawer = ({
             >
               Eliminar
             </button>
-
           </div>
         </>
       )}
 
-
       {mode === "edit" && (
-        <UserForm
-          defaultValues={user}
-          onSubmit={(data) => onSave(data)}
-        />
+        <UserForm defaultValues={user} onSubmit={(data) => onSave(data)} />
       )}
-
     </motion.div>
   )
 }

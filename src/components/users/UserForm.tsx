@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const UserForm = ({ defaultValues, onSubmit }: Props) => {
-
   const [preview, setPreview] = useState<string | null>(null)
 
   const {
@@ -24,7 +23,6 @@ export const UserForm = ({ defaultValues, onSubmit }: Props) => {
     defaultValues,
   })
 
-
   useEffect(() => {
     if (defaultValues?.avatar) {
       setPreview(defaultValues.avatar)
@@ -35,38 +33,27 @@ export const UserForm = ({ defaultValues, onSubmit }: Props) => {
     register("avatar")
   }, [register])
 
-
   const handleImageChange = (file: File) => {
-
     const imageUrl = URL.createObjectURL(file)
 
     setValue("avatar", imageUrl)
     setPreview(imageUrl)
-
   }
 
   const submitHandler = (data: UserFormData) => {
-
- 
     onSubmit({
       ...data,
-      avatar: data.avatar || preview || ""
+      avatar: data.avatar || preview || "",
     })
-
   }
 
   return (
-
     <form
       onSubmit={handleSubmit(submitHandler)}
       className="flex flex-col gap-4"
     >
-
-
       <div className="flex justify-center">
-
         <label className="relative cursor-pointer group">
-
           {preview ? (
             <img
               src={preview}
@@ -90,9 +77,7 @@ export const UserForm = ({ defaultValues, onSubmit }: Props) => {
             transition
             "
           >
-            <span className="text-xs text-white">
-              Cambiar
-            </span>
+            <span className="text-xs text-white">Cambiar</span>
           </div>
 
           <input
@@ -105,11 +90,8 @@ export const UserForm = ({ defaultValues, onSubmit }: Props) => {
               }
             }}
           />
-
         </label>
-
       </div>
-
 
       <input
         {...register("first_name")}
@@ -118,11 +100,8 @@ export const UserForm = ({ defaultValues, onSubmit }: Props) => {
       />
 
       {errors.first_name && (
-        <p className="text-red-500 text-sm">
-          {errors.first_name.message}
-        </p>
+        <p className="text-red-500 text-sm">{errors.first_name.message}</p>
       )}
-
 
       <input
         {...register("last_name")}
@@ -131,12 +110,8 @@ export const UserForm = ({ defaultValues, onSubmit }: Props) => {
       />
 
       {errors.last_name && (
-        <p className="text-red-500 text-sm">
-          {errors.last_name.message}
-        </p>
+        <p className="text-red-500 text-sm">{errors.last_name.message}</p>
       )}
-
-
 
       <input
         {...register("email")}
@@ -145,11 +120,8 @@ export const UserForm = ({ defaultValues, onSubmit }: Props) => {
       />
 
       {errors.email && (
-        <p className="text-red-500 text-sm">
-          {errors.email.message}
-        </p>
+        <p className="text-red-500 text-sm">{errors.email.message}</p>
       )}
-
 
       <button
         type="submit"
@@ -157,7 +129,6 @@ export const UserForm = ({ defaultValues, onSubmit }: Props) => {
       >
         Guardar usuario
       </button>
-
     </form>
   )
 }

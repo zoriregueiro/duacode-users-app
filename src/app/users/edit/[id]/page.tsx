@@ -7,7 +7,6 @@ import { UserForm } from "@/components/users/UserForm"
 import { UserFormData } from "@/utils/user.schema"
 
 export default function EditUserPage() {
-
   const params = useParams()
   const router = useRouter()
 
@@ -24,21 +23,17 @@ export default function EditUserPage() {
 
   return (
     <main className="p-10 max-w-md mx-auto">
-
-      <h1 className="text-2xl font-bold mb-6">
-        Editar usuario
-      </h1>
+      <h1 className="text-2xl font-bold mb-6">Editar usuario</h1>
 
       <UserForm
         defaultValues={{
           first_name: data?.first_name || "",
           last_name: data?.last_name || "",
           email: data?.email || "",
-          avatar: data?.avatar || ""
+          avatar: data?.avatar || "",
         }}
         onSubmit={handleUpdate}
       />
-
     </main>
   )
 }

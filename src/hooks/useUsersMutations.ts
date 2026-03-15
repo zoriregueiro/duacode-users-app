@@ -6,129 +6,94 @@ import { createUser } from "@/services/users.service"
 import { deleteLocalUser } from "@/utils/localUsers"
 
 export const useCreateUser = () => {
-
   const queryClient = useQueryClient()
 
   return useMutation({
-
     mutationFn: createUser,
 
-  onSuccess: (newUser) => {
+    onSuccess: (newUser) => {
+      queryClient.setQueryData(["users", 1], (old: any) => {
+        if (!old) return old
 
-  queryClient.setQueryData(["users", 1], (old: any) => {
+        return {
+          ...old,
+          data: [newUser, ...(old.data ?? [])],
+        }
+      })
 
-    if (!old) return old
-
-    return {
-      ...old,
-      data: [newUser, ...(old.data ?? [])]
-    }
-
+      toast.success("Usuario creado")
+    },
   })
-
-  toast.success("Usuario creado")
-
-
-
-    }
-
-  })
-
 }
 
 export const useUpdateUser = () => {
-
   const queryClient = useQueryClient()
 
   return useMutation({
-
-    mutationFn: ({ id, data }: any) =>
-      updateUser(id, data),
+    mutationFn: ({ id, data }: any) => updateUser(id, data),
 
     onSuccess: (updatedUser) => {
-
       queryClient.setQueryData(["users", 1], (old: any) => {
-
         if (!old) return old
 
         return {
           ...old,
           data: old.data.map((u: any) =>
-            u.id === updatedUser.id ? updatedUser : u
-          )
+            u.id === updatedUser.id ? updatedUser : u,
+          ),
         }
-
       })
 
       toast.success("Usuario actualizado")
-
     },
 
     onError: () => {
       toast.error("Error al actualizar usuario")
-    }
-
+    },
   })
-
 }
 
-
 export const useDeleteUser = () => {
-
   const queryClient = useQueryClient()
 
   return useMutation({
-
-    mutationFn: (id: number) =>
-      api.delete(`/users/${id}`),
+    mutationFn: (id: number) => api.delete(`/users/${id}`),
 
     onMutate: async (id) => {
-
       await queryClient.cancelQueries({
-        queryKey: ["users"]
+        queryKey: ["users"],
       })
 
       const previous = queryClient.getQueryData(["users", 1])
 
       queryClient.setQueryData(["users", 1], (old: any) => {
-
         if (!old) return old
 
         return {
           ...old,
           data: old.data.filter((u: any) => u.id !== id),
         }
-
       })
 
       return { previous }
-
     },
 
     onError: (_, __, context) => {
-
       queryClient.setQueryData(["users", 1], context?.previous)
 
       toast.error("No se pudo eliminar el usuario")
-
     },
 
     onSuccess: (_, id) => {
+      deleteLocalUser(id)
 
-  deleteLocalUser(id)
-
-  toast.success("Usuario eliminado")
-
-},
+      toast.success("Usuario eliminado")
+    },
 
     onSettled: () => {
-
       queryClient.invalidateQueries({
-        queryKey: ["users"]
+        queryKey: ["users"],
       })
-
-    }
-
+    },
   })
-
 }

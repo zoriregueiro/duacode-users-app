@@ -7,7 +7,6 @@ interface Props {
 export const Pagination = ({ page, totalPages, onChange }: Props) => {
   return (
     <div className="flex justify-center mt-10 gap-2">
-
       <button
         disabled={page === 1}
         onClick={() => onChange(page - 1)}
@@ -24,9 +23,7 @@ export const Pagination = ({ page, totalPages, onChange }: Props) => {
             key={p}
             onClick={() => onChange(p)}
             className={`px-3 py-1 rounded ${
-              p === page
-                ? "bg-green-500 text-black"
-                : "border border-gray-700"
+              p === page ? "bg-green-500 text-black" : "border border-gray-700"
             }`}
           >
             {p}
@@ -41,7 +38,6 @@ export const Pagination = ({ page, totalPages, onChange }: Props) => {
       >
         {">"}
       </button>
-
     </div>
   )
 }

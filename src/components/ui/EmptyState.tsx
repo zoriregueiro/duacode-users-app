@@ -5,7 +5,6 @@ interface Props {
 }
 
 export const EmptyState = ({ type = "users" }: Props) => {
-
   const config = {
     users: {
       icon: <Users size={20} />,
@@ -23,19 +22,13 @@ export const EmptyState = ({ type = "users" }: Props) => {
 
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center text-gray-400">
-
       <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gray-800">
         {state.icon}
       </div>
 
-      <h3 className="text-lg text-gray-200">
-        {state.title}
-      </h3>
+      <h3 className="text-lg text-gray-200">{state.title}</h3>
 
-      <p className="text-sm text-gray-500">
-        {state.description}
-      </p>
-
+      <p className="text-sm text-gray-500">{state.description}</p>
     </div>
   )
 }

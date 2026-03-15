@@ -5,12 +5,10 @@ import { getLocalUsers } from "@/utils/localUsers"
 const PER_PAGE = 6
 
 export const useUsers = (page: number) => {
-
   return useQuery({
     queryKey: ["users", page],
 
     queryFn: async () => {
-
       // traemos TODAS las páginas de la API
       const page1 = await getUsers(1)
       const page2 = await getUsers(2)
@@ -31,10 +29,8 @@ export const useUsers = (page: number) => {
       return {
         data: paginatedUsers,
         total_pages: totalPages,
-        total: allUsers.length
+        total: allUsers.length,
       }
-
-    }
+    },
   })
-
 }

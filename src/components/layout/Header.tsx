@@ -8,7 +8,6 @@ interface Props {
 
 export const Header = ({ search, onSearch, onCreateUser }: Props) => {
   return (
-
     <header
       className="
       sticky top-0 z-30
@@ -19,33 +18,20 @@ export const Header = ({ search, onSearch, onCreateUser }: Props) => {
       mb-2
       "
     >
-
       <div className="max-w-7xl mx-auto flex items-center justify-between py-4">
-
-
         <div className="flex items-center gap-3">
-
           <div className="bg-green-500 p-3 rounded-lg">
             <Users className="text-black" size={20} />
           </div>
 
           <div>
+            <h1 className="text-lg font-semibold text-white">Usuarios</h1>
 
-            <h1 className="text-lg font-semibold text-white">
-              Usuarios
-            </h1>
-
-            <p className="text-sm text-gray-400">
-              Gestión de equipo
-            </p>
-
+            <p className="text-sm text-gray-400">Gestión de equipo</p>
           </div>
-
         </div>
 
-
         <div className="relative w-[420px]">
-
           <Search
             size={16}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -66,7 +52,6 @@ export const Header = ({ search, onSearch, onCreateUser }: Props) => {
             focus:border-green-500
             "
           />
-
         </div>
 
         <button
@@ -83,15 +68,10 @@ export const Header = ({ search, onSearch, onCreateUser }: Props) => {
           transition
           "
         >
-
           <Plus size={16} />
-
           Crear usuario
-
         </button>
-
       </div>
-
     </header>
   )
 }
