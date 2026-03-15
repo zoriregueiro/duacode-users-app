@@ -1,74 +1,125 @@
 "use client"
+
+import { motion } from "framer-motion"
 import { User } from "@/types/user.types"
-import { useRouter } from "next/navigation"
+import { UserForm } from "@/components/users/UserForm"
+import { useEscapeKey } from "@/hooks/useScapeKey"
 
 interface Props {
   user: User | null
+  mode: "view" | "edit"
+  onEdit: () => void
   onClose: () => void
+  onSave: (data: any) => void
+  onDelete: (id: number) => void
 }
 
-export const UserDrawer = ({ user, onClose }: Props) => {
+export const UserDrawer = ({
+  user,
+  mode,
+  onEdit,
+  onClose,
+  onSave,
+  onDelete,
+}: Props) => {
 
-    const router = useRouter()
+  useEscapeKey(onClose)
 
   if (!user) return null
 
   return (
- <div
-  className={`
-    fixed right-0 top-0 h-full w-[420px]
-    bg-[#111827]
-    border-l border-gray-800
-    p-6
-    transform transition-transform duration-300
-    z-50
-    ${user ? "translate-x-0" : "translate-x-full"}
-  `}
->
+    <motion.div
+      initial={{ x: 420 }}
+      animate={{ x: 0 }}
+      exit={{ x: 420 }}
+      transition={{ duration: 0.25 }}
+      className="
+      fixed right-0 top-0 h-full w-[420px]
+      bg-[#111827]
+      border-l border-gray-800
+      p-6
+      z-50
+      flex flex-col
+      "
+    >
 
-      <div className="flex justify-between mb-6">
-        <h2 className="font-semibold">Detalle del usuario</h2>
+      <div className="flex justify-between items-center mb-6">
+
+        <h2 className="font-semibold text-lg">
+          {mode === "view" ? "Detalle del usuario" : "Editar usuario"}
+        </h2>
+
         <button onClick={onClose}>✕</button>
-      </div>
-
-      <div className="text-center">
-
-    <img
-  src={user.avatar}
-  className="w-24 h-24 rounded-full mx-auto border-4 border-green-500"
-/>
-
-        <h3 className="mt-4 font-semibold text-lg">
-          {user.first_name} {user.last_name}
-        </h3>
-
-        <p className="text-green-400">
-          Developer
-        </p>
 
       </div>
 
-      <div className="mt-6 space-y-3 text-sm text-gray-400">
 
-        <p>Email: {user.email}</p>
-        <p>Departamento: Engineering</p>
-        <p>Rol: Developer</p>
+      {mode === "view" && (
+        <>
+          <div className="text-center">
 
-      </div>
+            <img
+              src={user.avatar}
+              className="w-24 h-24 rounded-full mx-auto border-4 border-green-500"
+            />
 
-      <div className="w-100 flex justify-end">
+            <h3 className="mt-4 font-semibold text-lg">
+              {user.first_name} {user.last_name}
+            </h3>
 
-      <button
-  onClick={(e) => {
-    e.stopPropagation()
-    onClose()
-    router.push(`/users/edit/${user.id}`)
-  }}
-  className="text-sm bg-green-500 hover:bg-green-600 px-3 py-2 rounded-md"
->
-  Editar
-</button>
-      </div>
-    </div>
+            <p className="text-green-400 text-sm">
+              Developer
+            </p>
+
+          </div>
+
+          <div className="mt-8 space-y-4 text-sm">
+
+            <div className="bg-gray-800/40 p-3 rounded-lg">
+              <p className="text-xs text-gray-500">Email</p>
+              <p>{user.email}</p>
+            </div>
+
+            <div className="bg-gray-800/40 p-3 rounded-lg">
+              <p className="text-xs text-gray-500">Departamento</p>
+              <p>Engineering</p>
+            </div>
+
+            <div className="bg-gray-800/40 p-3 rounded-lg">
+              <p className="text-xs text-gray-500">Rol</p>
+              <p>Developer</p>
+            </div>
+
+          </div>
+
+          <div className="mt-auto pt-6 flex gap-3">
+
+            <button
+              onClick={onEdit}
+              className="flex-1 bg-green-500 hover:bg-green-600 text-black font-medium py-1 rounded"
+            >
+              Editar
+            </button>
+
+            <button
+              onClick={() => onDelete(user.id)}
+              className="flex-1 border border-red-500 text-red-500 py-1 rounded"
+            >
+              Eliminar
+            </button>
+
+          </div>
+        </>
+      )}
+
+
+      {mode === "edit" && (
+        <UserForm
+          defaultValues={user}
+          onSubmit={(data) => onSave(data)}
+        />
+      )}
+
+    </motion.div>
   )
 }

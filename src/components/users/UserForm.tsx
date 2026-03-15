@@ -24,72 +24,93 @@ export const UserForm = ({ defaultValues, onSubmit }: Props) => {
     defaultValues,
   })
 
-useEffect(() => {
 
-  if (defaultValues?.avatar) {
-    setPreview(defaultValues.avatar)
+  useEffect(() => {
+    if (defaultValues?.avatar) {
+      setPreview(defaultValues.avatar)
+    }
+  }, [defaultValues])
+
+  useEffect(() => {
+    register("avatar")
+  }, [register])
+
+
+  const handleImageChange = (file: File) => {
+
+    const imageUrl = URL.createObjectURL(file)
+
+    setValue("avatar", imageUrl)
+    setPreview(imageUrl)
+
   }
-}, [defaultValues])
 
- const handleImageChange = (file: any) => {
-  setValue("avatar", file)
-  setPreview(URL.createObjectURL(file))
-}
+  const submitHandler = (data: UserFormData) => {
+
+ 
+    onSubmit({
+      ...data,
+      avatar: data.avatar || preview || ""
+    })
+
+  }
 
   return (
+
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(submitHandler)}
       className="flex flex-col gap-4"
     >
-<div className="flex flex-col items-center gap-3">
 
-<div className="flex justify-center">
 
-  <label className="relative cursor-pointer group">
+      <div className="flex justify-center">
 
-    {preview ? (
-      <img
-        src={preview}
-        alt="avatar"
-        className="w-24 h-24 rounded-full object-cover border-4 border-green-500"
-      />
-    ) : (
-      <div className="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center text-white">
-        Avatar
+        <label className="relative cursor-pointer group">
+
+          {preview ? (
+            <img
+              src={preview}
+              alt="avatar"
+              className="w-24 h-24 rounded-full object-cover border-4 border-green-500"
+            />
+          ) : (
+            <div className="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center text-white">
+              Avatar
+            </div>
+          )}
+
+          <div
+            className="
+            absolute inset-0
+            rounded-full
+            bg-black/50
+            flex items-center justify-center
+            opacity-0
+            group-hover:opacity-100
+            transition
+            "
+          >
+            <span className="text-xs text-white">
+              Cambiar
+            </span>
+          </div>
+
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              if (e.target.files?.[0]) {
+                handleImageChange(e.target.files[0])
+              }
+            }}
+          />
+
+        </label>
+
       </div>
-    )}
 
-  
-    <div className="
-      absolute inset-0
-      rounded-full
-      bg-black/50
-      flex items-center justify-center
-      opacity-0
-      group-hover:opacity-100
-      transition
-    ">
-      <span className="text-xs text-white">
-        Cambiar
-      </span>
-    </div>
 
-    <input
-      type="file"
-      accept="image/*"
-      className="hidden"
-      onChange={(e) => {
-        if (e.target.files?.[0]) {
-          handleImageChange(e.target.files[0])
-        }
-      }}
-    />
-
-  </label>
-
-</div>
-
-</div>
       <input
         {...register("first_name")}
         placeholder="Nombre"
@@ -102,7 +123,6 @@ useEffect(() => {
         </p>
       )}
 
-  
 
       <input
         {...register("last_name")}
@@ -130,9 +150,10 @@ useEffect(() => {
         </p>
       )}
 
+
       <button
         type="submit"
-        className="bg-green-500 hover:bg-green-600 text-white p-2 rounded"
+        className="bg-green-500 hover:bg-green-600 text-black font-medium px-3 py-2 rounded"
       >
         Guardar usuario
       </button>

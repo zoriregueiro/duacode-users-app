@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation"
 import { useUser } from "@/hooks/useUser"
-import { UserDetail } from "@/components/users/userDetail"
+import { UserDetail } from "@/components/users/UserDetail"
 
 export default function UserPage() {
 
