@@ -13,3 +13,10 @@ export interface UsersResponse {
   total_pages: number
   data: User[]
 }
+
+export interface updateResponse {
+  first_name: string
+  last_name: string
+  email: string
+  avatar: string
+}

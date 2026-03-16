@@ -5,11 +5,13 @@ import { UserForm } from "./UserForm"
 import { X } from "lucide-react"
 import { useEffect } from "react"
 import { useEscapeKey } from "@/hooks/useScapeKey"
+import { User } from "@/types/user.types"
+import { UserFormData } from "@/utils/user.schema"
 
 interface Props {
   open: boolean
   onClose: () => void
-  onCreate: (data: any) => void
+  onCreate: (data: UserFormData) => void
 }
 
 export const CreateUserModal = ({ open, onClose, onCreate }: Props) => {

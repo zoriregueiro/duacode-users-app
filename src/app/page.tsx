@@ -46,10 +46,6 @@ export default function Home() {
 
   const isDrawerOpen = !!selectedUser
 
-  useEffect(() => {
-    setPage(1)
-  }, [debouncedSearch])
-
   return (
     <main className="min-h-screen bg-[#0b0f14] text-gray-200 p-10">
       <div

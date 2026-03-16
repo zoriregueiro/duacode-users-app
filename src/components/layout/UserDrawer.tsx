@@ -5,6 +5,8 @@ import { User } from "@/types/user.types"
 import { UserForm } from "@/components/users/UserForm"
 import { useEscapeKey } from "@/hooks/useScapeKey"
 import { Users } from "lucide-react"
+import { useState } from "react"
+import { ConfirmModal } from "../ui/ConfirmModal"
 
 interface Props {
   user: User | null
@@ -24,6 +26,7 @@ export const UserDrawer = ({
   onDelete,
 }: Props) => {
   useEscapeKey(onClose)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   if (!user) return null
 
@@ -97,7 +100,7 @@ export const UserDrawer = ({
             </button>
 
             <button
-              onClick={() => onDelete(user.id)}
+              onClick={() => setConfirmOpen(true)}
               className="flex-1 border border-red-500 text-red-500 py-1 rounded"
             >
               Eliminar
@@ -109,6 +112,17 @@ export const UserDrawer = ({
       {mode === "edit" && (
         <UserForm defaultValues={user} onSubmit={(data) => onSave(data)} />
       )}
+
+      <ConfirmModal
+        open={confirmOpen}
+        title="Eliminar usuario"
+        description="Esta acción no se puede deshacer."
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => {
+          onDelete(user.id)
+          setConfirmOpen(false)
+        }}
+      />
     </motion.div>
   )
 }

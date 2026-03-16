@@ -8,16 +8,23 @@ import {
 } from "@/utils/localUsers"
 import { v4 as uuid } from "uuid"
 
+type CreateUserInput = {
+  first_name: string
+  last_name: string
+  email: string
+  avatar?: string
+}
+
 export const getUsers = async (page = 1): Promise<UsersResponse> => {
   const { data } = await api.get(`/users?page=${page}`)
   return data
 }
 
-export const createUser = async (user: any) => {
+export const createUser = async (user: CreateUserInput) => {
   await api.post("/users", user)
 
   const newUser = {
-    id: uuid(),
+    id: +uuid(),
     ...user,
     avatar:
       user.avatar ??
@@ -38,7 +45,9 @@ export const updateUser = async (
     avatar?: string
   },
 ) => {
-  await api.put(`/users/${id}`, user)
+  try {
+    await api.put(`/users/${id}`, user)
+  } catch {}
 
   const updatedUser: User = {
     id,

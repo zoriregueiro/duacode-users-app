@@ -14,6 +14,7 @@ export const getLocalUsers = (): User[] => {
 
 export const saveLocalUsers = (users: User[]) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(users))
+  window.dispatchEvent(new Event("localStorageChange"))
 }
 
 export const addLocalUser = (user: User) => {
@@ -37,6 +38,7 @@ export const addDeletedUser = (id: number) => {
   const updated = [...deleted, id]
 
   localStorage.setItem(DELETED_KEY, JSON.stringify(updated))
+  window.dispatchEvent(new Event("localStorageChange"))
 }
 
 export const removeLocalUser = (id: number) => {
