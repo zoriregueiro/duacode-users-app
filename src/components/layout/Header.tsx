@@ -18,7 +18,17 @@ export const Header = ({ search, onSearch, onCreateUser }: Props) => {
       mb-2
       "
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between py-4">
+      <div
+        className="
+flex
+flex-col
+sm:flex-row
+sm:items-center
+sm:justify-between
+gap-4
+mb-8
+"
+      >
         <div className="flex items-center gap-3">
           <div className="bg-green-500 p-3 rounded-lg">
             <Users className="text-black" size={20} />
@@ -42,8 +52,9 @@ export const Header = ({ search, onSearch, onCreateUser }: Props) => {
             onChange={(e) => onSearch(e.target.value)}
             placeholder="Buscar usuario..."
             className="
-            w-full
-            pl-9 pr-4 py-2
+w-full
+sm:w-max-[250px]
+   pl-9 pr-4 py-2
             bg-[#0f172a]
             border border-gray-800
             rounded-lg
@@ -57,15 +68,15 @@ export const Header = ({ search, onSearch, onCreateUser }: Props) => {
         <button
           onClick={onCreateUser}
           className="
-          flex items-center gap-2
-          bg-green-500
-          hover:bg-green-600
-          text-black
-          font-medium
-          px-4 py-2
-          rounded-lg
-          text-sm
+        
           transition
+          flex items-center justify-center gap-2
+bg-green-500 hover:bg-green-600
+text-black font-medium
+px-4 py-2
+rounded-lg
+text-sm
+w-full sm:w-auto
           "
         >
           <Plus size={16} />

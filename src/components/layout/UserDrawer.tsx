@@ -36,14 +36,23 @@ export const UserDrawer = ({
       animate={{ x: 0 }}
       exit={{ x: 420 }}
       transition={{ duration: 0.25 }}
+      // className="
+      // fixed right-0 top-0 h-full w-[420px]
+      // bg-[#111827]
+      // border-l border-gray-800
+      // p-6
+      // z-50
+      // flex flex-col
+      // "
       className="
-      fixed right-0 top-0 h-full w-[420px]
-      bg-[#111827]
-      border-l border-gray-800
-      p-6
-      z-50
-      flex flex-col
-      "
+fixed right-0 top-0 h-full
+w-full sm:w-[420px]
+bg-[#111827]
+border-l border-gray-800
+p-6
+z-50
+flex flex-col
+"
     >
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-semibold text-lg">

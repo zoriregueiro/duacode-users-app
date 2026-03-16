@@ -47,7 +47,7 @@ export default function Home() {
   const isDrawerOpen = !!selectedUser
 
   return (
-    <main className="min-h-screen bg-[#0b0f14] text-gray-200 p-10">
+    <main className="min-h-screen bg-[#0b0f14] text-gray-200 p-4 sm:p-6 lg:p-10">
       <div
         className={`transition-all max-w-7xl mx-auto ${
           isDrawerOpen ? "blur-sm opacity-60" : ""
