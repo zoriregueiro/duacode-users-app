@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { User } from "@/types/user.types"
 import { UserForm } from "@/components/users/UserForm"
 import { useEscapeKey } from "@/hooks/useScapeKey"
+import { Users } from "lucide-react"
 
 interface Props {
   user: User | null
@@ -52,10 +53,16 @@ export const UserDrawer = ({
       {mode === "view" && (
         <>
           <div className="text-center">
-            <img
-              src={user.avatar}
-              className="w-24 h-24 rounded-full mx-auto border-4 border-green-500"
-            />
+            {user.avatar ? (
+              <img
+                src={user.avatar}
+                className="w-24 h-24 rounded-full mx-auto border-4 border-green-500"
+              />
+            ) : (
+              <div className="w-24 h-24 rounded-full mx-auto border-4 border-green-500 flex justify-center items-center">
+                <Users size={24} className="text-gray-400" />
+              </div>
+            )}
 
             <h3 className="mt-4 font-semibold text-lg">
               {user.first_name} {user.last_name}

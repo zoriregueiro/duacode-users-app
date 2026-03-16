@@ -2,7 +2,6 @@ import { User } from "@/types/user.types"
 import { Avatar } from "../ui/Avatar"
 import { Card } from "../ui/Card"
 import { Mail, Building, Calendar } from "lucide-react"
-import { useRouter } from "next/navigation"
 
 interface Props {
   user: User
@@ -10,7 +9,6 @@ interface Props {
   state?: "active" | "pending" | "inactive"
 }
 export const UserCard = ({ user, onClick, state }: Props) => {
-  const router = useRouter()
   const statusColor = {
     active: "border-l-green-500",
     pending: "border-l-yellow-500",

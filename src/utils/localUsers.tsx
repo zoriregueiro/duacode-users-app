@@ -1,13 +1,15 @@
 import { User } from "@/types/user.types"
 
-const STORAGE_KEY = "custom_users"
+const STORAGE_KEY = "local_users"
+
+const DELETED_KEY = "deleted_users"
 
 export const getLocalUsers = (): User[] => {
   if (typeof window === "undefined") return []
 
-  const data = localStorage.getItem(STORAGE_KEY)
+  const stored = localStorage.getItem(STORAGE_KEY)
 
-  return data ? JSON.parse(data) : []
+  return stored ? JSON.parse(stored) : []
 }
 
 export const saveLocalUsers = (users: User[]) => {
@@ -22,12 +24,33 @@ export const addLocalUser = (user: User) => {
   saveLocalUsers(updated)
 }
 
+export const getDeletedUsers = (): number[] => {
+  if (typeof window === "undefined") return []
+
+  const stored = localStorage.getItem(DELETED_KEY)
+  return stored ? JSON.parse(stored) : []
+}
+
+export const addDeletedUser = (id: number) => {
+  const deleted = getDeletedUsers()
+
+  const updated = [...deleted, id]
+
+  localStorage.setItem(DELETED_KEY, JSON.stringify(updated))
+}
+
+export const removeLocalUser = (id: number) => {
+  const users = getLocalUsers()
+
+  const updated = users.filter((u) => u.id !== id)
+
+  saveLocalUsers(updated)
+}
+
 export const updateLocalUser = (updatedUser: User) => {
   const users = getLocalUsers()
 
-  const updated = users.map((u: User) =>
-    u.id === updatedUser.id ? updatedUser : u,
-  )
+  const updated = users.map((u) => (u.id === updatedUser.id ? updatedUser : u))
 
   saveLocalUsers(updated)
 }
@@ -35,7 +58,7 @@ export const updateLocalUser = (updatedUser: User) => {
 export const deleteLocalUser = (id: number) => {
   const users = getLocalUsers()
 
-  const updated = users.filter((u: User) => u.id !== id)
+  const updated = users.filter((u) => u.id !== id)
 
   saveLocalUsers(updated)
 }

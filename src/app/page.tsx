@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { useUsers } from "@/hooks/useUsers"
 import { Header } from "@/components/layout/Header"
 import { UserList } from "@/components/users/UserList"
@@ -15,32 +15,30 @@ import { useDebounce } from "@/hooks/useDebounce"
 import { useUpdateUser, useDeleteUser } from "@/hooks/useUsersMutations"
 import { CreateUserModal } from "@/components/users/CreateUserModal"
 import { useCreateUser } from "@/hooks/useUsersMutations"
+import { usePagination } from "@/hooks/usePagination"
+import { useMergedUsers } from "@/hooks/useMergergedUsers"
+import { useUserSearch } from "@/hooks/useUserSearch"
 
 export default function Home() {
+  const USERS_PER_PAGE = 6
+
   const [page, setPage] = useState(1)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [search, setSearch] = useState("")
   const [drawerMode, setDrawerMode] = useState<"view" | "edit">("view")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
 
-  const { data, error, isLoading } = useUsers(page)
+  const { data, error, isLoading } = useUsers()
 
-  const users = data?.data || []
+  const apiUsers: User[] = data?.data || []
+
+  const users = useMergedUsers(apiUsers)
 
   const debouncedSearch = useDebounce(search, 400)
 
-  const filteredUsers = useMemo(() => {
-    if (!debouncedSearch) return users
+  const filteredUsers = useUserSearch(users, debouncedSearch)
 
-    const term = debouncedSearch.toLowerCase()
-
-    return users.filter(
-      (user) =>
-        user.first_name.toLowerCase().includes(term) ||
-        user.last_name.toLowerCase().includes(term) ||
-        user.email.toLowerCase().includes(term),
-    )
-  }, [users, debouncedSearch])
+  const paginatedUsers = usePagination(filteredUsers, page, USERS_PER_PAGE)
 
   const updateMutation = useUpdateUser()
   const deleteMutation = useDeleteUser()
@@ -65,7 +63,7 @@ export default function Home() {
           onSearch={setSearch}
         />
 
-        <StatsGrid />
+        <StatsGrid totalUsers={users.length} />
 
         {error && (
           <Alert message="No se pudieron cargar los usuarios. Intenta de nuevo." />
@@ -84,7 +82,7 @@ export default function Home() {
 
         {!isLoading && !error && users.length > 0 && (
           <UserList
-            users={filteredUsers}
+            users={paginatedUsers}
             onSelect={(user) => {
               setSelectedUser(user)
               setDrawerMode("view")
@@ -95,7 +93,7 @@ export default function Home() {
         {filteredUsers.length > 0 && (
           <Pagination
             page={page}
-            totalPages={data?.total_pages || 1}
+            totalPages={Math.ceil(filteredUsers.length / USERS_PER_PAGE)}
             onChange={setPage}
           />
         )}
@@ -119,7 +117,10 @@ export default function Home() {
             },
           )
         }}
-        onDelete={(id) => deleteMutation.mutate(id)}
+        onDelete={(id) => {
+          deleteMutation.mutate(id)
+          setSelectedUser(null)
+        }}
       />
 
       {isDrawerOpen && (
